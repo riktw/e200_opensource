@@ -118,129 +118,40 @@ int main(int argc, char **argv)
   
   red_led.pin = 1;
   red_led.direction = GPIO_DIRECTION_OUT;
-  red_led.mode = GPIO_ALT_MODE;
-  red_led.select_alt = GPIO_ALT1;
+  red_led.mode = GPIO_GPIO_MODE;
+  red_led.invert = GPIO_INVERT_ENABLE;  //RGB leds are on when output is low, so invert here.
   per_gpio_setup(red_led);
   
   blue_led.pin = 2;
   blue_led.direction = GPIO_DIRECTION_OUT;
-  blue_led.mode = GPIO_ALT_MODE;
-  blue_led.select_alt = GPIO_ALT1;
+  blue_led.mode = GPIO_GPIO_MODE;
+  blue_led.invert = GPIO_INVERT_ENABLE;
   per_gpio_setup(blue_led);
   
   green_led.pin = 3;
   green_led.direction = GPIO_DIRECTION_OUT;
-  green_led.mode = GPIO_ALT_MODE;
-  green_led.select_alt = GPIO_ALT1;
+  green_led.mode = GPIO_GPIO_MODE;
+  green_led.invert = GPIO_INVERT_ENABLE;
   per_gpio_setup(green_led);
  
-  per_gpio_write(red_led, GPIO_ON);
-  per_gpio_write(blue_led, GPIO_ON);
-  per_gpio_write(green_led, GPIO_ON);
-  
-  pwm_settings.block = 0;
-  pwm_settings.mode = PWM_MODE_ALWAYS_ON;
-  pwm_settings.clockdiv = 0;
-  pwm_settings.countval = 128;
-  per_pwm_global_setup(pwm_settings);
-  
-  pwm_red.block = 0;
-  pwm_red.pin = 1;
-  pwm_red.alignment = PWM_ALIGNMENT_RIGHT;
-  pwm_red.compare = 0;
-  per_pwm_pin_setup(pwm_red);
-  
-  pwm_green.block = 0;
-  pwm_green.pin = 3;
-  pwm_green.alignment = PWM_ALIGNMENT_RIGHT;
-  pwm_green.compare = 0;
-  per_pwm_pin_setup(pwm_green);
-  
-  pwm_blue.block = 0;
-  pwm_blue.pin = 2;
-  pwm_blue.alignment = PWM_ALIGNMENT_RIGHT;
-  pwm_blue.compare = 0;
-  per_pwm_pin_setup(pwm_blue);
-  
-  PWM0_REG(PWM_S) = 128;
+  per_gpio_write(red_led, GPIO_OFF);
+  per_gpio_write(blue_led, GPIO_OFF);
+  per_gpio_write(green_led, GPIO_OFF);
 
-  delay_ms(500);
-  uint8_t test = 0;
-  uint8_t color = 1;
   while(1)
   {
-    if(color == 1)
-    {
-      if(test == 0)
-      {
-        pwm_red.compare += 1;
-        per_pwm_pin_setup(pwm_red);
-        delay_ms(8);
-        if(pwm_red.compare == 120)
-        {
-          test = 1;
-        }
-      }
-      else
-      {
-        pwm_red.compare -= 1;
-        per_pwm_pin_setup(pwm_red);
-        delay_ms(8);
-        if(pwm_red.compare == 0)
-        {
-          test = 0;
-          color++;
-        }
-      }
-    }
-    else if(color == 2)
-    {
-      if(test == 0)
-      {
-        pwm_blue.compare += 1;
-        per_pwm_pin_setup(pwm_blue);
-        delay_ms(8);
-        if(pwm_blue.compare == 120)
-        {
-          test = 1;
-        }
-      }
-      else
-      {
-        pwm_blue.compare -= 1;
-        per_pwm_pin_setup(pwm_blue);
-        delay_ms(8);
-        if(pwm_blue.compare == 0)
-        {
-          test = 0;
-          color++;
-        }
-      }
-    }
-    else if(color == 3)
-    {
-      if(test == 0)
-      {
-        pwm_green.compare += 1;
-        per_pwm_pin_setup(pwm_green);
-        delay_ms(8);
-        if(pwm_green.compare == 120)
-        {
-          test = 1;
-        }
-      }
-      else
-      {
-        pwm_green.compare -= 1;
-        per_pwm_pin_setup(pwm_green);
-        delay_ms(8);
-        if(pwm_green.compare == 0)
-        {
-          test = 0;
-          color = 1;
-        }
-      }
-    }
+    per_gpio_write(red_led, GPIO_ON);
+    delay_ms(250);
+    per_gpio_write(red_led, GPIO_OFF);
+    delay_ms(250);
+    per_gpio_write(blue_led, GPIO_ON);
+    delay_ms(250);
+    per_gpio_write(blue_led, GPIO_OFF);
+    delay_ms(250);
+    per_gpio_write(green_led, GPIO_ON);
+    delay_ms(250);
+    per_gpio_write(green_led, GPIO_OFF);
+    delay_ms(250);
   }
   return 0;
 
