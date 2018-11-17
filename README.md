@@ -1,3 +1,8 @@
+Readme
+-----------
+This fork of the Hummingbird E200 will mostly have more SW examples and a peripheral library added.
+
+
 Hummingbird E200 Opensource Processor Core
 ================
 
